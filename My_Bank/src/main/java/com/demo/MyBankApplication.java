@@ -39,6 +39,7 @@ public class MyBankApplication  implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		/*
 		Client c1 = clientRepository.save(new Client("Hassan", "hassan@gmail.fr"));
 		Client c2 = clientRepository.save(new Client("Ahmed", "ahmed@gmail.fr"));
 		
@@ -59,6 +60,7 @@ public class MyBankApplication  implements CommandLineRunner {
 		operationRepository.save(new Retrait(new Date(), 2000, cp2));
 		
 		banqueMetier.verser("c1", 11111);
+		*/
 	}
 
 }
