@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http:/www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Authentification</title>
+<link rel="stylesheet" type="text/css"
+	href="../static/css/bootstrap.min.css"
+	th:href="@{/css/bootstrap.min.css}" />
+
+<link rel="stylesheet" type="text/css" href="../static/css/style.css"
+	th:href="@{/css/style.css}" />
+
+</head>
+<body>
+	<div class="col-md-5 col-md-offset-3 spacer01">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Authentification</div>
+			<div class="panel-body">
+
+				<div class="red text-center" th:if="${param.error}">Authentification
+					Failed</div>
+					
+				<div class="red text-center" th:if="${param.logout}">You Have been Logout</div>
+				<form th:action="@{/login}" method="post">
+
+					<div class="form-group">
+
+						<label class="label-control">UserName:</label> <input
+							class="form-control" type="text" name="username">
+					</div>
+
+					<div class="form-group">
+
+						<label class="label-control">PassWord:</label> <input
+							class="form-control" type="password" name="password">
+					</div>
+
+					<button type="submit" class="btn btn-primary">Login</button>
+
+				</form>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

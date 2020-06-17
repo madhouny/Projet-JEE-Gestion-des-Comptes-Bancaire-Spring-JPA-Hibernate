@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.demo.entities.Compte;
 import com.demo.entities.Operation;
@@ -23,13 +24,17 @@ public class BanqueController {
 	}
 
 	@RequestMapping("/consultecompte")
-	public String consulter(Model model, String codeCompte) {
+	public String consulter(Model model, String codeCompte,
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "5") int size) {
 		model.addAttribute("codeCompte", codeCompte);
 		try {
 			Compte cp = banqueMetier.consulterCompte(codeCompte);
 			Page<Operation> pageOperation = banqueMetier.listOperation(
-					codeCompte, 0, 4);
+					codeCompte, page, size);
 			model.addAttribute("listOperations", pageOperation.getContent());
+			int[] pages = new int[pageOperation.getTotalPages()];
+			model.addAttribute("pages", pages);
 			model.addAttribute("compte", cp);
 		} catch (Exception e) {
 			model.addAttribute("exception", e.getMessage());
@@ -38,24 +43,26 @@ public class BanqueController {
 		return "comptes";
 	}
 
-	@RequestMapping(value="/saveOperation", method=RequestMethod.POST)
+	@RequestMapping(value = "/saveOperation", method = RequestMethod.POST)
 	public String saveOperation(Model model, String typeOperation,
 			String codeCompte, double montant, String codeCompte2) {
 
-		try{
+		try {
 			if (typeOperation.equals("VERS")) {
 				banqueMetier.verser(codeCompte, montant);
 			} else if (typeOperation.equals("RET")) {
 				banqueMetier.retirer(codeCompte, montant);
-			} if(typeOperation.equals("VIRE")) {
+			}
+			if (typeOperation.equals("VIRE")) {
 				banqueMetier.virement(codeCompte, codeCompte2, montant);
 			}
-		}catch(Exception e){
-			model.addAttribute("exception",e);
-			return "redirect:/consultecompte?codeCompte="+codeCompte+"&exception="+ e.getMessage();
+		} catch (Exception e) {
+			model.addAttribute("exception", e);
+			return "redirect:/consultecompte?codeCompte=" + codeCompte
+					+ "&exception=" + e.getMessage();
 		}
-		
-		return "redirect:/consultecompte?codeCompte="+codeCompte;
+
+		return "redirect:/consultecompte?codeCompte=" + codeCompte;
 	}
 
 }
